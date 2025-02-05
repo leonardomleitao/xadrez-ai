@@ -7,7 +7,6 @@ export default class JogadorOpenAI {
     })
 
     static async jogar(estado: string, lado: 'white' | 'black'): Promise<string | null> {
-        console.log(estado, lado)
         const response = await this.client.chat.completions.create({
             model: 'gpt-4o',
             messages: [
