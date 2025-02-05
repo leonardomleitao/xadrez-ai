@@ -1,22 +1,28 @@
 'use client'
-import useJogo from '@/data/hooks/useJogo'
+import { JogadorLado } from '@/shared/model/JogadorLado'
+import Image from 'next/image'
 
 export interface JogadorProps {
-    logo: string
+    imagem: string
+    lado: JogadorLado
+    selecionado?: boolean
     className?: string
 }
 
 export default function Jogador(props: JogadorProps) {
-    const { jogar } = useJogo()
     return (
         <div
             className={`
-                flex flex-col items-center gap-2
+                flex flex-col items-center justify-center gap-2 p-7 rounded-lg
+                bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 
+                ${props.selecionado ? 'border-2 border-zinc-400' : 'border border-zinc-600'}
                 ${props.className}
             `}
-            onClick={() => jogar()}
         >
-            <img src={props.logo} alt="Jogador" className="h-16" />
+            <div className="relative h-16 w-48">
+                <Image src={props.imagem} alt="Jogador" fill />
+            </div>
+            <Image src={`/${props.lado}-pawn.svg`} alt="Peão" width={64} height={64} />
         </div>
     )
 }

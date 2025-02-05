@@ -3,9 +3,7 @@ import Casa from './Casa'
 import Peca from './Peca'
 import useJogo from '@/data/hooks/useJogo'
 
-export interface TabuleiroProps {}
-
-export default function Tabuleiro(props: TabuleiroProps) {
+export default function Tabuleiro() {
     const { status } = useJogo()
 
     function renderizarLinha(linha: number) {
