@@ -12,16 +12,16 @@ export default function Home() {
     const { jogar, jogadores, processando, erros, proximoJogador, registrarJogador } = useJogo()
 
     useEffect(() => {
-        // registrarJogador({
-        //     lado: JogadorLado.PRETAS,
-        //     imagem: '/gemini.svg',
-        //     modelo: Modelo.GEMINI,
-        // })
         registrarJogador({
             lado: JogadorLado.PRETAS,
-            imagem: '/deepseek.svg',
-            modelo: Modelo.DEEPSEEK,
+            imagem: '/gemini.svg',
+            modelo: Modelo.GEMINI,
         })
+        // registrarJogador({
+        //     lado: JogadorLado.PRETAS,
+        //     imagem: '/deepseek.svg',
+        //     modelo: Modelo.DEEPSEEK,
+        // })
         registrarJogador({
             lado: JogadorLado.BRANCAS,
             imagem: '/openai.svg',

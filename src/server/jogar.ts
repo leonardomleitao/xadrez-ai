@@ -5,6 +5,7 @@ import modelos from './providers'
 export default async function jogarComModelo(
     estado: string,
     jogador: Jogador,
+    reiEmCheck: boolean = false,
     ignorarJogadas: string[] = [],
     tentativas: number = 0,
 ): Promise<string | null> {
@@ -12,9 +13,9 @@ export default async function jogarComModelo(
     if (!jogar) return null
 
     try {
-        return jogar(estado, jogador.lado, ignorarJogadas) ?? null
+        return jogar(estado, jogador.lado, reiEmCheck, ignorarJogadas) ?? null
     } catch (error) {
         if (tentativas >= 10) throw error
-        return jogarComModelo(estado, jogador, ignorarJogadas, tentativas + 1)
+        return jogarComModelo(estado, jogador, reiEmCheck, ignorarJogadas, tentativas + 1)
     }
 }

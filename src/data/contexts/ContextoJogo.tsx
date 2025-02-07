@@ -42,6 +42,9 @@ export function ProvedorJogo(props: any) {
     }, [])
 
     async function jogar(ignorarJogadas: string[] = [], tentativas: number = 0) {
+        const terminou = jogo.isCheckMate || jogo.isStalemate || jogo.isRepetition
+        if (terminou) return setProcessando(false)
+
         setProcessando(true)
         let jogada: string | null = null
         try {
@@ -49,7 +52,7 @@ export function ProvedorJogo(props: any) {
                 proximoJogador() === JogadorLado.BRANCAS ? jogadores.brancas : jogadores.pretas
             if (!jogador) return
 
-            jogada = await jogarComModelo(jogo.getFen(), jogador)
+            jogada = await jogarComModelo(jogo.getFen(), jogador, jogo.isCheck, ignorarJogadas)
 
             if (!jogada) return
             jogo.move(jogada)
@@ -59,7 +62,9 @@ export function ProvedorJogo(props: any) {
             if (tentativas >= 10) {
                 setProcessando(false)
                 setErros((erros) => [...erros, error.message ?? error])
-            } else jogar([...ignorarJogadas, jogada ?? ''], tentativas + 1)
+            } else {
+                jogar([...ignorarJogadas, jogada ?? ''], tentativas + 1)
+            }
         }
     }
 
