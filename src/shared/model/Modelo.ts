@@ -1,5 +1,5 @@
 export enum Modelo {
     DEEPSEEK,
-    OPENAI,
+    CHATGPT,
     GEMINI,
 }

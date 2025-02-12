@@ -9,8 +9,8 @@ export default function Casa(props: CasaProps) {
     return (
         <div
             className={`
-                    flex justify-center items-center w-24 h-24 relative 
-                    ${props.clara ? 'bg-[#EBECD0]' : 'bg-[#739552]'}
+                flex justify-center items-center size-24 relative 
+                ${props.clara ? 'bg-[#EBECD0]' : 'bg-[#739552]'}
             `}
         >
             {props.children}

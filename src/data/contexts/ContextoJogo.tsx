@@ -1,18 +1,23 @@
 'use client'
-import { createContext, useCallback, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useRef, useState } from 'react'
 import { JogadorLado } from '../../shared/model/JogadorLado'
 import * as chess from 'chess'
 import Jogador from '../../shared/model/Jogador'
 import jogarComModelo from '@/server/jogar'
+import { TipoPeca } from '@/shared/model/TipoPeca'
 
 export interface ContextoJogoProps {
-    erros: string[]
+    mensagens: string[]
     processando: boolean
     jogo: chess.AlgebraicGameClient
     status: chess.AlgebraicGameStatus
     jogadores: {
         brancas: Jogador | null
         pretas: Jogador | null
+    }
+    pecasCapturadas: {
+        brancas: TipoPeca[]
+        pretas: TipoPeca[]
     }
     jogar: () => void
     proximoJogador: () => JogadorLado
@@ -25,7 +30,7 @@ export function ProvedorJogo(props: any) {
     const jogoRef = useRef(chess.create({ PGN: true }))
     const jogo = jogoRef.current
 
-    const [erros, setErros] = useState<string[]>([])
+    const [mensagens, setMensagens] = useState<string[]>([])
     const [processando, setProcessando] = useState<boolean>(false)
 
     const [status, setStatus] = useState<chess.AlgebraicGameStatus>(jogo.getStatus())
@@ -34,6 +39,11 @@ export function ProvedorJogo(props: any) {
         pretas: Jogador | null
     }>({ brancas: null, pretas: null })
 
+    const [pecasCapturadas, setPecasCapturadas] = useState<{
+        brancas: TipoPeca[]
+        pretas: TipoPeca[]
+    }>({ brancas: [], pretas: [] })
+
     const registrarJogador = useCallback(function (jogador: Jogador) {
         setJogadores((jogadores) => ({
             ...jogadores,
@@ -41,9 +51,32 @@ export function ProvedorJogo(props: any) {
         }))
     }, [])
 
+    useEffect(() => {
+        jogo.on(
+            'capture' as any,
+            ((move: any) => {
+                const { side, type } = move.capturedPiece
+                if (side.name === JogadorLado.BRANCAS) {
+                    setPecasCapturadas((pecas) => ({
+                        ...pecas,
+                        brancas: [...pecas.brancas, type],
+                    }))
+                } else {
+                    setPecasCapturadas((pecas) => ({
+                        ...pecas,
+                        pretas: [...pecas.pretas, type],
+                    }))
+                }
+            }) as any,
+        )
+    }, [jogo])
+
     async function jogar(ignorarJogadas: string[] = [], tentativas: number = 0) {
         const terminou = jogo.isCheckMate || jogo.isStalemate || jogo.isRepetition
-        if (terminou) return setProcessando(false)
+        if (terminou) {
+            setMensagens(['Jogo terminou!'])
+            return setProcessando(false)
+        }
 
         setProcessando(true)
         let jogada: string | null = null
@@ -58,10 +91,11 @@ export function ProvedorJogo(props: any) {
             jogo.move(jogada)
             setStatus(jogo.getStatus())
             setProcessando(false)
+            setMensagens([])
         } catch (error: any) {
             if (tentativas >= 10) {
                 setProcessando(false)
-                setErros((erros) => [...erros, error.message ?? error])
+                setMensagens((msgs) => [...msgs, error.message ?? error])
             } else {
                 jogar([...ignorarJogadas, jogada ?? ''], tentativas + 1)
             }
@@ -76,11 +110,12 @@ export function ProvedorJogo(props: any) {
     return (
         <ContextoJogo.Provider
             value={{
-                erros,
+                mensagens,
                 processando,
                 jogo,
                 status,
                 jogadores,
+                pecasCapturadas,
                 proximoJogador,
                 jogar,
                 registrarJogador,

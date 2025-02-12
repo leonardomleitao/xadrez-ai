@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 import { extrairJogadas } from '../utils/xadrez'
 import { gerarPrompt } from '../utils/chat'
 
-export default async function jogarComOpenAI(
+export default async function jogarComChatGPT(
     estado: string,
     lado: JogadorLado,
     reiEmCheck: boolean = false,

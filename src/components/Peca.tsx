@@ -1,9 +1,11 @@
 import { JogadorLado } from '@/shared/model/JogadorLado'
+import { TipoPeca } from '@/shared/model/TipoPeca'
 import Image from 'next/image'
 
 export interface PecaProps {
-    tipo: 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
+    tipo: TipoPeca
     cor: JogadorLado
+    mini?: boolean
 }
 
 export default function Peca(props: PecaProps) {
@@ -11,8 +13,8 @@ export default function Peca(props: PecaProps) {
         <div>
             <Image
                 src={`/${props.cor}-${props.tipo}.svg`}
-                width={64}
-                height={64}
+                width={props.mini ? 40 : 64}
+                height={props.mini ? 40 : 64}
                 alt={`${props.cor}_${props.tipo}`}
             />
         </div>
