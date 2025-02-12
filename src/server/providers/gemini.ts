@@ -23,7 +23,7 @@ export default async function jogarComGemini(
     })
 
     const data = await response.json()
-    const saida = data.candidates[0].content.parts[0].text ?? ''
+    const saida = data.candidates?.[0].content?.parts?.[0].text ?? ''
     const jogadas = extrairJogadas(saida).map((i) => i.trim())
     return jogadas[jogadas.length - 1] ?? null
 }

@@ -9,8 +9,8 @@ import { TipoPeca } from '@/shared/model/TipoPeca'
 export interface ContextoJogoProps {
     mensagens: string[]
     processando: boolean
-    jogo: chess.AlgebraicGameClient
-    status: chess.AlgebraicGameStatus
+    jogo: chess.GameClient
+    status: chess.GameStatus
     jogadores: {
         brancas: Jogador | null
         pretas: Jogador | null
@@ -72,9 +72,16 @@ export function ProvedorJogo(props: any) {
     }, [jogo])
 
     async function jogar(ignorarJogadas: string[] = [], tentativas: number = 0) {
-        const terminou = jogo.isCheckMate || jogo.isStalemate || jogo.isRepetition
+        const checkmate = (jogo as any).isCheckmate
+        const terminou = checkmate || jogo.isStalemate || jogo.isRepetition
         if (terminou) {
-            setMensagens(['Jogo terminou!'])
+            setMensagens(
+                [
+                    checkmate ? 'Jogo terminou! Checkmate!' : '',
+                    jogo.isStalemate ? 'Empate!' : '',
+                    jogo.isRepetition ? 'Repetição!' : '',
+                ].filter(Boolean),
+            )
             return setProcessando(false)
         }
 

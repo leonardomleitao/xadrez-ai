@@ -19,7 +19,7 @@ export default function SelecaoJogador(props: SelecaoJogadorProps) {
                 className={`
                     flex flex-col items-center justify-center gap-2 p-7 rounded-lg
                     bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 
-                    cursor-pointer
+                    cursor-pointer size-36
                 `}
                 onClick={() => props.jogadorMudou?.(jogador)}
             >
@@ -37,7 +37,7 @@ export default function SelecaoJogador(props: SelecaoJogadorProps) {
                 className={`
                     flex flex-col items-center justify-center gap-2 p-7 rounded-lg
                     bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 
-                    ${props.className ?? ''}
+                    w-44 ${props.className ?? ''}
                 `}
             >
                 <div className="relative size-20">

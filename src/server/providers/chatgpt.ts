@@ -28,7 +28,7 @@ export default async function jogarComChatGPT(
         ],
     })
 
-    const saida = response.choices[0].message.content ?? ''
+    const saida = response.choices?.[0].message?.content ?? ''
     const jogadas = extrairJogadas(saida).map((i) => i.trim())
     return jogadas[jogadas.length - 1] ?? null
 }

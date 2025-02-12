@@ -10,6 +10,7 @@ import useJogo from '@/data/hooks/useJogo'
 import Peca from '@/components/Peca'
 import Mensagens from '@/components/Mensagens'
 import { Span } from 'next/dist/trace'
+import PecasCapturadas from '@/components/PecasCapturadas'
 
 export default function Home() {
     const {
@@ -32,8 +33,8 @@ export default function Home() {
         jogadores.pretas && (
             <div className="flex flex-col items-center justify-center h-screen gap-10">
                 <h1 className="text-4xl font-extrabold">Xadrez de IAs</h1>
-                <div className="flex justify-center items-center gap-20">
-                    <div className="flex flex-col gap-4">
+                <div className="flex justify-center items-center w-screen">
+                    <div className="flex-1 flex flex-col items-center gap-4">
                         <SelecaoJogador
                             jogador={jogadores.pretas}
                             opcoes={jogadoresDisponiveis}
@@ -60,22 +61,18 @@ export default function Home() {
                         />
                     </div>
                     <Tabuleiro />
-                    <div className="flex flex-col justify-between self-stretch">
-                        <div className="flex gap-2">
-                            {pecasCapturadas.brancas.map((peca, index) => (
-                                <Peca key={index} tipo={peca} cor={JogadorLado.BRANCAS} mini />
-                            ))}
-                        </div>
+                    <div className="flex-1 flex flex-col items-center justify-between self-stretch">
+                        <PecasCapturadas
+                            pecas={pecasCapturadas.brancas}
+                            lado={JogadorLado.BRANCAS}
+                        />
 
                         <div className="flex flex-col gap-4">
                             <BotaoJogar onClick={() => jogar()} processando={processando} />
                             <Mensagens valor={mensagens} />
                         </div>
-                        <div className="flex gap-2">
-                            {pecasCapturadas.pretas.map((peca, index) => (
-                                <Peca key={index} tipo={peca} cor={JogadorLado.PRETAS} mini />
-                            ))}
-                        </div>
+
+                        <PecasCapturadas pecas={pecasCapturadas.pretas} lado={JogadorLado.PRETAS} />
                     </div>
                 </div>
             </div>
